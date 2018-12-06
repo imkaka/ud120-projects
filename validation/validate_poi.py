@@ -14,19 +14,26 @@ import pickle
 import sys
 sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
+from sklearn.cross_validation import train_test_split
+from sklearn.tree import DecisionTreeClassifier
 
-data_dict = pickle.load(open("../final_project/final_project_dataset.pkl", "r") )
+data_dict = pickle.load(open("../final_project/final_project_dataset.pkl", "r"))
 
-### first element is our labels, any added elements are predictor
-### features. Keep this the same for the mini-project, but you'll
-### have a different feature list when you do the final project.
+# first element is our labels, any added elements are predictor
+# features. Keep this the same for the mini-project, but you'll
+# have a different feature list when you do the final project.
 features_list = ["poi", "salary"]
 
-data = featureFormat(data_dict, features_list)
+data = featureFormat(data_dict, features_list, sort_keys='../tools/python2_lesson13_keys.pkl')
 labels, features = targetFeatureSplit(data)
 
 
+# it's all yours from here forward!
+# Train Test Split
+train_features, test_features, train_labels, test_labels = train_test_split(features, labels, test_size=0.30, random_state=42)
 
-### it's all yours from here forward!  
+# Decision Tree Classifier
+clf = DecisionTreeClassifier()
+clf.fit(train_features, train_labels)
 
-
+print clf.score(test_features, test_labels)
